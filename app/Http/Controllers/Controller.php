@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Asakusuma\SugarWrapper\Rest;
 
-class Controller extends BaseController
+ class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
@@ -22,34 +22,38 @@ class Controller extends BaseController
 
 
         $suite->connect();
-        $suite->loggedInUserInfo();
-
-        dd($suite);
-
-        $error = $suite->get_error();
-
-    $session_id = session_id();
 
 
-        $get_entry_parameters = array(
-            //Flag the record as a recently viewed item
-            'track_view' => true,
+        dd($suite->connect());
+
+        $sessionId = $suite->sessionId();
+
+       $modules = $suite->get_available_modules();
+
+        $fields = array(
+                'Accounts' => array(
+                            'name',
+                            'email1',
+                            'website'
+                )
+        );
+
+        $options = array(
+           // 'track_view' => true
         );
 
 
+        $i = '10d284f8-62af-d2a8-83ce-575009d73815';
 
 
-        $results = $suite->get_entry($session_id , 'Accounts', '3D10d284f8-62af-d2a8-83ce-575009d73815',$get_entry_parameters);
+        $oauth = $suite->oauth_access($sessionId);
 
-        $suiteR = $suite->print_results($results);
+        dd($oauth);
 
+              $getEntryResult = $suite->get_entry($i,'Accounts',$fields,$options);
+        dd($getEntryResult);
 
-       /* if($error !== FALSE) {
-            return view('welcome', compact("error"));
-
-        }*/
-
-       return view('welcome', compact("suiteR"));
+       return view('welcome', compact("modules", "sessionId"));
 
     }
 

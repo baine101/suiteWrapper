@@ -8,7 +8,9 @@
                 @if(isset($error['name']))
                 <p>{{$error['name']}}</p>
                 @else
-                <p>{{$suiteR}}</p>
+                <p>
+                {{$sessionId}}<br>
+                {{$getEntryResult}}</p>
                 @endif
             </div>
         </div>
