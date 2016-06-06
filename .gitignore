@@ -1,4 +1,7 @@
+!/vendor/asakusuma
+!/vendor/authbucket
 /vendor
+
 /node_modules
 /public/storage
 Homestead.yaml

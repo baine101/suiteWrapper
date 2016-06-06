@@ -9,26 +9,67 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Asakusuma\SugarWrapper\Rest;
 
- class Controller extends BaseController
+
+class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
     function conn() {
-        $suite = new \Asakusuma\SugarWrapper\Rest;
 
-        $suite->seturl('http://suite.local/service/v4/Rest.php');
+
+
+        $suite = new  Rest();
+
+        $suite->seturl('http://suite.local/service/v3_1/Rest.php');
         $suite->setUsername('admin');
         $suite->setPassword('alexw');
 
 
+
         $suite->connect();
 
+        dd($suite->oauth_access());
 
-        dd($suite->connect());
+        //debug connection response
+         dd($suite->setUrl() , $suite->setUsername(),$suite->setPassword());
 
-        $sessionId = $suite->sessionId();
+        $Dom = 'http://suite.local';
+        $url = 'http://suite.local/service/v3_1/Rest.php';
+
+
+
+        $provider = new \League\OAuth2\Client\Provider\GenericProvider([
+            'clientId' => 'a1b2c3', //client id
+            'clientSecret' => 'blink182',
+            'redirectUri' => $Dom,
+            'urlAuthorize' => $url.'?module=OAuthTokens&action=authorize&token=a1b2c3',
+            'urlAccessToken' => $url.'?token',
+            'urlResourceOwnerDetails' => $url.'?resource'
+        ]);
+
+
+        $authURL = $provider->getAuthorizationUrl();
+
+
+
+
+        // Get the state generated for you and store it to the session.
+        $state = $_SESSION['oauth2state'] = $provider->getState();
+
+        dd($authURL, $state);
+
+
+        header('Location: ' . $authURL);
+
+
+
+
+      //  $sessionId = $suite->sessionId();
 
        $modules = $suite->get_available_modules();
+
+        //dd($modules);
+
 
         $fields = array(
                 'Accounts' => array(
@@ -43,12 +84,13 @@ use Asakusuma\SugarWrapper\Rest;
         );
 
 
-        $i = '10d284f8-62af-d2a8-83ce-575009d73815';
+        $i = '1a3e9c24-63b4-7573-cd66-575585d8883a';
 
 
-        $oauth = $suite->oauth_access($sessionId);
+      // $oauth = $suite->oauth_access();
 
-        dd($oauth);
+        //dd($oauth);
+
 
               $getEntryResult = $suite->get_entry($i,'Accounts',$fields,$options);
         dd($getEntryResult);

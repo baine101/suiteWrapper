@@ -4,9 +4,17 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Daursu/curl"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
+        "asakusuma/sugarcrm-wrapper": "dev-master",
+        "league/oauth2-client": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -46,6 +54,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
-
+    },
+    "minimum-stability": "dev"
 }
